@@ -203,3 +203,115 @@ SELECT name, continent FROM world x
 
 
   
+-- SUM and COUNT
+
+SELECT SUM(population)
+FROM world
+
+select distinct continent from world
+
+select sum(gdp) from world where continent = 'Africa'
+
+
+SELECT COUNT(name) FROM world WHERE area >= 1000000
+
+SELECT SUM(population) FROM world WHERE name IN ('Estonia', 'Latvia', 'Lithuania')
+
+
+SELECT continent, COUNT(name) FROM world
+GROUP BY continent
+
+SELECT continent, COUNT(name) FROM world WHERE population >= 10000000
+GROUP BY continent
+
+SELECT continent FROM world 
+GROUP BY continent
+HAVING SUM(population) >= 100000000
+
+
+-- JOINS
+
+SELECT title, artist
+FROM album JOIN track
+  ON (album.asin=track.album)
+WHERE song = 'Alison'
+
+
+SELECT artist FROM album JOIN track ON (album.asin=track.album) WHERE song = 'Exodus'
+
+SELECT track.song FROM album JOIN track ON (track.album=album.asin) WHERE album.title = 'Blur'
+
+SELECT album.title, COUNT(track.song)
+FROM album JOIN track ON (album.asin=track.album)
+GROUP BY album.title
+
+
+SELECT album.title, COUNT(track.song) 
+FROM album JOIN track ON (album.asin=track.album)
+WHERE track.song LIKE '%Heart%'
+GROUP BY album.title
+
+
+SELECT track.song
+FROM album JOIN track ON (album.asin=track.album)
+WHERE track.song LIKE album.title
+
+
+SELECT album.title
+FROM album
+WHERE album.title LIKE album.artist
+
+
+SELECT album.title, album.price, COUNT(track.song)
+FROM album JOIN track ON album.asin = track.album
+GROUP BY album.title, album.price -- why add price here?
+HAVING (album.price/COUNT(track.song)) < 0.5
+
+
+
+SELECT matchid, player 
+FROM goal 
+WHERE teamid = 'GER'
+
+
+SELECT id,stadium,team1,team2
+FROM game
+WHERE id = '1012'
+
+
+SELECT player, teamid, stadium, mdate
+FROM game JOIN goal ON (id=matchid)
+WHERE teamid = 'GER' 
+
+
+
+SELECT team1, team2, player
+FROM game JOIN goal ON (id=matchid)
+WHERE player LIKE 'Mario%'
+
+
+SELECT player, teamid, coach, gtime
+FROM goal JOIN eteam on teamid=id
+WHERE gtime<=10
+
+
+SELECT mdate, teamname
+FROM game JOIN eteam ON (team1=eteam.id)
+WHERE coach = 'Fernando Santos'
+
+
+SELECT goal.player
+  FROM game JOIN goal ON (matchid=id)
+WHERE stadium = 'National Stadium, Warsaw'
+
+
+SELECT DISTINCT player
+FROM game JOIN goal ON matchid = id
+WHERE (team1='GER' AND team2='GRE' AND teamid!='GER') -- didn't work
+
+
+SELECT teamname, COUNT(*)
+  FROM eteam JOIN goal ON id=teamid
+GROUP BY teamname
+
+
